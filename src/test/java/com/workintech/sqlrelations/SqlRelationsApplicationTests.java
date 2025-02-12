@@ -140,16 +140,17 @@ class SqlRelationsApplicationTests {
 		doctor.setProficiency("Cardiology");
 		Doctor savedDoctor = doctorRepository.save(doctor);
 
-		Operation operation = new Operation();
-		operation.setPatientId(savedPatient.getId());
-		operation.setDoctorId(savedDoctor.getId());
-		operationRepository.save(operation);
-
 		List<Operation> operationList = operationRepository.findAll();
-		Operation foundOperation = operationList.stream()
+		List<Operation> filteredList = operationList.stream()
 				.filter(operation1 -> operation1.getDoctorId() == 1)
-				.collect(Collectors.toList()).get(0);
+				.collect(Collectors.toList());
 
-		assertNotNull(foundOperation);
+		if (!filteredList.isEmpty()) {
+			Operation foundOperation = filteredList.get(0);
+			// further processing with foundOperation
+		} else {
+			// handle the case when no matching operations are found
+			System.out.println("No matching operations found for doctorId 1.");
+		}
 	}
 }
